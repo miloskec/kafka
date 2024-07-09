@@ -24,6 +24,11 @@ services:
       - zookeeper
     networks:
       - sail
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
       
 networks:
   sail:
