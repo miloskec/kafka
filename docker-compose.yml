@@ -3,6 +3,7 @@ services:
     image: bitnami/zookeeper:latest
     container_name: zookeeper
     environment:
+      - TZ=${TZ}
       - ZOO_ENABLE_AUTH=yes
     ports:
       - "2181:2181"
@@ -15,6 +16,7 @@ services:
     ports:
       - "9092:9092"
     environment:
+      - TZ=${TZ}
       - KAFKA_BROKER_ID=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
