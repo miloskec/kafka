@@ -12,6 +12,13 @@ spec:
       labels:
         app: zookeeper
     spec:
+      nodeSelector:
+        app: kafka-node
+      tolerations:
+      - key: "app"
+        operator: "Equal"
+        value: "kafka"
+        effect: "NoSchedule"
       containers:
       - name: zookeeper
         image: bitnami/zookeeper:latest

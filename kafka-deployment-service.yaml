@@ -12,6 +12,13 @@ spec:
       labels:
         app: kafka
     spec:
+      nodeSelector:
+        app: kafka-node
+      tolerations:
+      - key: "app"
+        operator: "Equal"
+        value: "kafka"
+        effect: "NoSchedule"
       containers:
       - name: kafka
         image: bitnami/kafka:latest
