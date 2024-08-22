@@ -9,6 +9,12 @@ services:
       - "2181:2181"
     networks:
       - sail
+    healthcheck:
+      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   kafka:
     image: bitnami/kafka:latest
@@ -27,7 +33,7 @@ services:
     networks:
       - sail
     healthcheck:
-      test: ["CMD", "kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      test: ["CMD", "kafka-broker-api-versions.sh", "--bootstrap-server", "kafka:9092"]
       interval: 30s
       timeout: 10s
       retries: 3
