@@ -13,12 +13,19 @@ spec:
         app: kafka
     spec:
       nodeSelector:
-        app: kafka-node
-      tolerations:
-      - key: "app"
-        operator: "Equal"
-        value: "kafka"
-        effect: "NoSchedule"
+        node-restriction.kubernetes.io/kafka: "true"
+      initContainers:
+      - name: check-zookeeper
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          until nc -z zookeeper-service.default.svc.cluster.local 2181; do
+            echo "Waiting for ZooKeeper to be ready...";
+            sleep 3;
+          done;
+          echo "ZooKeeper is ready.";
       containers:
       - name: kafka
         image: bitnami/kafka:latest
@@ -47,10 +54,10 @@ spec:
             - sh
             - -c
             - kafka-broker-api-versions.sh --bootstrap-server localhost:9092
-          initialDelaySeconds: 60
-          periodSeconds: 5
-          timeoutSeconds: 20
-          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 10
 ---
 apiVersion: v1
 kind: Service
